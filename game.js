@@ -711,11 +711,15 @@ function goToScene(name) {
   state.transition = {
     t: 0,
     dur: 500,
-    after: () => {
+    midpoint: () => {
       state.scene = name;
       const sc = scenes[name];
       if (sc && sc.init) sc.init();
       SCENE_NAME_EL.textContent = sc.title || name;
+    },
+    onDone: () => {
+      const sc = scenes[name];
+      if (sc && sc.onShown) sc.onShown();
     },
   };
 }
@@ -723,12 +727,14 @@ function goToScene(name) {
 function updateTransition(dt) {
   if (!state.transition) return;
   state.transition.t += dt;
-  if (state.transition.t > state.transition.dur / 2 && state.transition.after) {
-    state.transition.after();
-    state.transition.after = null;
+  if (state.transition.t > state.transition.dur / 2 && state.transition.midpoint) {
+    state.transition.midpoint();
+    state.transition.midpoint = null;
   }
   if (state.transition.t >= state.transition.dur) {
+    const done = state.transition.onDone;
     state.transition = null;
+    if (done) done();
   }
 }
 function drawTransition() {
@@ -863,6 +869,8 @@ scenes.INTRO = {
   title: "PROLOGUE",
   init() {
     resetPlayer(W / 2, 200);
+  },
+  onShown() {
     startDialog(
       [
         { speaker: "NARRATEUR", text: "Paris, 1985. Pat Hellio se reveille." },
