@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="dark" />
+  <title>Pat Hellio's Exciting 80s Adventures</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="frame">
+    <div id="bezel">
+      <canvas id="game" width="480" height="270"></canvas>
+      <div id="scanlines" aria-hidden="true"></div>
+      <div id="crt-glow" aria-hidden="true"></div>
+    </div>
+    <div id="hud">
+      <div id="hud-left">
+        <span class="hud-label">PAT HELLIO</span>
+        <span id="scene-name">CHARGEMENT…</span>
+      </div>
+      <div id="hud-right">
+        <span class="hud-label">SCORE</span>
+        <span id="score">0000</span>
+      </div>
+    </div>
+    <div id="controls-help">
+      ← → ↑ MARCHER / SAUTER &nbsp;·&nbsp; CLIC INTERAGIR &nbsp;·&nbsp; E PARLER/RAMASSER &nbsp;·&nbsp; I INVENTAIRE &nbsp;·&nbsp; ECHAP PAUSE
+    </div>
+  </div>
+  <script src="game.js" defer></script>
+</body>
+</html>
