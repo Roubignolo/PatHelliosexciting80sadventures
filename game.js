@@ -287,16 +287,24 @@ function updatePlayerPlatform(dt, platforms) {
   player.vx = dx * 1.6;
   if (dx !== 0) player.facing = dx;
 
-  // jump
+  // jump (with variable height: short tap = small hop, hold = full jump)
   if (
     (input.pressed.has("Space") ||
       input.pressed.has("ArrowUp") ||
       input.pressed.has("KeyW")) &&
     player.onGround
   ) {
-    player.vy = -5.2;
+    player.vy = -7;
     player.onGround = false;
     SFX.jump();
+  }
+  // cut jump short if player releases
+  const jumpHeld =
+    input.keys.has("Space") ||
+    input.keys.has("ArrowUp") ||
+    input.keys.has("KeyW");
+  if (!jumpHeld && player.vy < -3.5) {
+    player.vy = -3.5;
   }
 
   // gravity
@@ -1197,11 +1205,11 @@ scenes.RUE = {
     state.flags.rue_coins = 0;
     state.flags.rue_total_coins = 5;
     this.coins = [
-      { x: 260, y: 130, taken: false },
-      { x: 460, y: 100, taken: false },
-      { x: 720, y: 90, taken: false },
-      { x: 1080, y: 110, taken: false },
-      { x: 1480, y: 70, taken: false },
+      { x: 320, y: 175, taken: false }, // bonus dans le 1er trou
+      { x: 460, y: 130, taken: false }, // au-dessus d'une plateforme basse
+      { x: 740, y: 110, taken: false }, // un peu plus haut
+      { x: 1050, y: 125, taken: false }, // chemin du milieu
+      { x: 1470, y: 75, taken: false }, // le plus dur, fin de niveau
     ];
     this.platforms = [
       // ground segments (with gaps = pits)
@@ -1210,21 +1218,26 @@ scenes.RUE = {
       { x: 620, y: 220, w: 240, h: 60 },
       { x: 940, y: 220, w: 200, h: 60 },
       { x: 1240, y: 220, w: 260, h: 60 },
-      { x: 1580, y: 220, w: 260, h: 60 },
-      // floating platforms (TVs, arcade tops)
-      { x: 240, y: 160, w: 50, h: 12 },
-      { x: 320, y: 130, w: 50, h: 12 },
-      { x: 440, y: 130, w: 60, h: 12 },
-      { x: 560, y: 100, w: 50, h: 12 },
-      { x: 700, y: 120, w: 60, h: 12 },
-      { x: 820, y: 150, w: 50, h: 12 },
-      { x: 1000, y: 160, w: 60, h: 12 },
-      { x: 1060, y: 140, w: 60, h: 12 },
-      { x: 1180, y: 110, w: 60, h: 12 },
-      { x: 1380, y: 140, w: 50, h: 12 },
-      { x: 1460, y: 100, w: 60, h: 12 },
-      // building stoop = goal
-      { x: 1700, y: 200, w: 100, h: 12 },
+      { x: 1580, y: 220, w: 280, h: 60 },
+      // Stepping stones LARGES au ras du sol : le chemin "facile"
+      // Gap 1 (240->340, 100 px) : 2 stones
+      { x: 248, y: 205, w: 42, h: 10 },
+      { x: 300, y: 205, w: 42, h: 10 },
+      // Gap 2 (540->620, 80 px) : 1 stone wide
+      { x: 548, y: 205, w: 72, h: 10 },
+      // Gap 3 (860->940, 80 px) : 1 stone wide
+      { x: 868, y: 205, w: 72, h: 10 },
+      // Gap 4 (1140->1240, 100 px) : 2 stones
+      { x: 1148, y: 205, w: 42, h: 10 },
+      { x: 1200, y: 205, w: 42, h: 10 },
+      // Gap 5 (1500->1580, 80 px) : 1 stone wide
+      { x: 1508, y: 205, w: 72, h: 10 },
+      // BONUS : plateformes hautes pour les cartouches (chemin optionnel)
+      { x: 430, y: 165, w: 60, h: 10 },
+      { x: 710, y: 150, w: 60, h: 10 },
+      { x: 1030, y: 165, w: 60, h: 10 },
+      { x: 1380, y: 145, w: 60, h: 10 },
+      { x: 1450, y: 110, w: 50, h: 10 },
     ];
     this.cameraX = 0;
     if (!state.flags.rue_intro) {
