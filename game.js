@@ -1722,6 +1722,8 @@ function render() {
   if (sc && sc.render) sc.render();
 
   drawPops();
+  // Wipe goes between the scene and the UI so dialogs/toasts stay on top
+  drawTransition();
   drawToast();
   if (state.dialog) drawDialog();
   if (state.showInv) drawInventoryOverlay();
@@ -1731,7 +1733,6 @@ function render() {
     textCenter("PAUSE", W / 2, H / 2, PAL.yellow, "20px 'Press Start 2P'");
     textCenter("ECHAP POUR REPRENDRE", W / 2, H / 2 + 20, PAL.cyan, "8px 'Press Start 2P'");
   }
-  drawTransition();
 
   // CRT flicker line
   const fy = (state.flicker / 1000) * H;
